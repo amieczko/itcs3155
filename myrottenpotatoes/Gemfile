@@ -54,8 +54,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #use haml for templates
 gem 'haml'
-#use ruby debugger
-group :development, :test do
-  gem 'debugger'
-end
-end
+
+
