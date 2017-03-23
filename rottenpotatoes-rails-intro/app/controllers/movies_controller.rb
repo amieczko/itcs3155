@@ -12,20 +12,31 @@ class MoviesController < ApplicationController
 
   def index
     
-    @movies = Movie.where(session[:ratings].order(params[:sort_by])
-    #show only wanted ratings
-
-    
+    @movies = Movie.order(params[:sort_by])
     
     #pull all types of ratings from DB
     @all_ratings = Movie.all_ratings
-
+    
+    #temporary hold for movies
+    @movies_rating_filtered = []
+    
     if params[:ratings]#if there are params in the URI route.
-      #@ratings_hash = params[:ratings] #Recieve hash from URI
-      #@ratings_array = params[:ratings].keys #Extract Data from Hash?
+      @ratings_hash = params[:ratings] #Recieve hash from URI
+      @ratings_array = params[:ratings].keys #Extract Data from Hash?
       #session[:ratings] = @ratings_hash #sets Session data(live view)
-      session[:ratings] = params[:ratings]
-
+      #session[:ratings] = params[:ratings]
+      
+      #for each movie
+      @movies.each do |movie| 
+        #if movie rating matches choices from checkbox
+        if @ratings_array.include? movie.rating
+          #add to orphan movie instance variable
+          @movies_rating_filtered << movie
+        end
+      end
+      
+      #update movies
+      @movies = @movies_rating_filtered
     else #clear hash and ratings array.
       @ratings_hash = {}
       @ratings_array = @all_ratings #Updates ratings_array to all ratings for display. 
