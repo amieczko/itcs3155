@@ -14,17 +14,28 @@ class MoviesController < ApplicationController
     
     @movies = Movie.order(params[:sort_by])
     
+    #if ratings checked
+    if params[:ratings]
+      #sort by rating
+      @movies = @movies.where(:rating => params[:ratings].keys) if params[:ratings].present?
+      
+      #sets session ratings
+      session[:ratings] = params[:ratings]
+    end
+    
     #pull all types of ratings from DB
     @all_ratings = Movie.all_ratings
     
+=begin
     #temporary hold for movies
     @movies_rating_filtered = []
     
     if params[:ratings]#if there are params in the URI route.
       @ratings_hash = params[:ratings] #Recieve hash from URI
       @ratings_array = params[:ratings].keys #Extract Data from Hash?
-      #session[:ratings] = @ratings_hash #sets Session data(live view)
-      #session[:ratings] = params[:ratings]
+      
+      #sets session ratings
+      session[:ratings] = params[:ratings]
       
       #for each movie
       @movies.each do |movie| 
@@ -41,7 +52,7 @@ class MoviesController < ApplicationController
       @ratings_hash = {}
       @ratings_array = @all_ratings #Updates ratings_array to all ratings for display. 
     end
-    
+=end
     
     #sort
     if params[:sort_by]
